@@ -2,11 +2,11 @@
 
 import { useState, useMemo } from 'react';
 import styles from './page.module.css';
-import { Header } from "./sample/(components)/Header";
-import { PostCard } from './sample/(components)/PostCard';
-import { SearchBar } from './sample/(components)/SearchBar';
-import { Pagination } from './sample/(components)/Pagination';
-import type { Post } from './sample/(types)/Post';
+import { Header } from "./(components)/Header";
+import { PostCard } from './(components)/PostCard';
+import { SearchBar } from './(components)/SearchBar';
+import { Pagination } from './(components)/Pagination';
+import type { Post } from './(types)/Post';
 
 // とりあえずのモックデータ
 const BASE_TIME = new Date('2025-11-23T00:00:00.000Z').getTime();
