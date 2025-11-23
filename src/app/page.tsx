@@ -1,35 +1,34 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import styles from './page.module.css';
+import { useState, useMemo } from "react";
+import styles from "./page.module.css";
 import { Header } from "./(components)/Header";
-import { PostCard } from './(components)/PostCard';
-import { SearchBar } from './(components)/SearchBar';
-import { Pagination } from './(components)/Pagination';
-import type { Post } from './(types)/Post';
+import { PostCard } from "./(components)/PostCard";
+import { SearchBar } from "./(components)/SearchBar";
+import { Pagination } from "./(components)/Pagination";
+import type { Post } from "./(types)/Post";
 
 // とりあえずのモックデータ
-const BASE_TIME = new Date('2025-11-23T00:00:00.000Z').getTime();
+const BASE_TIME = new Date("2025-11-23T00:00:00.000Z").getTime();
 const allMockPosts: Post[] = Array.from({ length: 90 }, (_, i) => {
   const minutesAgo = i * 5;
-  const createdAt = new Date(
-    BASE_TIME - minutesAgo * 60 * 1000
-  ).toISOString(); //
+  const createdAt = new Date(BASE_TIME - minutesAgo * 60 * 1000).toISOString(); //
 
   return {
     id: i + 1,
     title: `Post Title ${i + 1}`,
-    category: 'Category',
-    author: i % 2 === 0 ? 'Alice' : 'Bob',
+    category: "Category",
+    author: i % 2 === 0 ? "Alice" : "Bob",
     createdAt,
-    excerpt: 'サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト',
+    excerpt:
+      "サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト",
   };
 });
 
 const PAGE_SIZE = 9;
 
 export default function HomePage() {
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null);
 
@@ -37,12 +36,8 @@ export default function HomePage() {
     const lower = searchValue.toLowerCase();
 
     return allMockPosts.filter((post) => {
-      const matchSearch = lower
-        ? post.title.toLowerCase().includes(lower)
-        : true;
-      const matchAuthor = selectedAuthor
-        ? post.author === selectedAuthor
-        : true;
+      const matchSearch = lower ? post.title.toLowerCase().includes(lower) : true;
+      const matchAuthor = selectedAuthor ? post.author === selectedAuthor : true;
 
       return matchSearch && matchAuthor;
     });
@@ -95,11 +90,7 @@ export default function HomePage() {
             </div>
           </section>
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onChangePage={handleChangePage}
-          />
+          <Pagination currentPage={currentPage} totalPages={totalPages} onChangePage={handleChangePage} />
         </div>
       </main>
     </>

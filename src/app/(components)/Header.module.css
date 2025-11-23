@@ -1,6 +1,6 @@
 .header {
   width: 100%;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   padding: 20px 32px;
   box-sizing: border-box;
 }
@@ -28,7 +28,7 @@
 }
 
 .outline {
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   color: #000;
 }
 

@@ -35,26 +35,12 @@ function formatRelativeTime(isoString: string) {
   return diffDay === 1 ? "a day ago" : `${diffDay} days ago`;
 }
 
-export function PostCard({
-  title,
-  category,
-  author,
-  createdAt,
-  imageUrl,
-  excerpt,
-  onAuthorClick,
-}: PostCardProps) {
+export function PostCard({ title, category, author, createdAt, imageUrl, excerpt, onAuthorClick }: PostCardProps) {
   return (
     <article className={styles.card}>
       <div className={styles.thumbnail}>
         {imageUrl && (
-          <Image
-            src={imageUrl}
-            alt={title}
-            fill
-            className={styles.image}
-            sizes="(max-width: 768px) 100vw, 30vw"
-          />
+          <Image src={imageUrl} alt={title} fill className={styles.image} sizes="(max-width: 768px) 100vw, 30vw" />
         )}
       </div>
 
@@ -65,11 +51,7 @@ export function PostCard({
         </div>
 
         <div className={styles.meta}>
-          <button
-            type="button"
-            className={styles.author}
-            onClick={() => onAuthorClick?.(author)}
-          >
+          <button type="button" className={styles.author} onClick={() => onAuthorClick?.(author)}>
             {author}
           </button>
           <span className={styles.date}>{formatRelativeTime(createdAt)}</span>
