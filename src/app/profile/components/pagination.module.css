@@ -1,0 +1,145 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem 0;
+}
+
+@media (min-width: 768px) {
+  .pagination {
+    justify-content: center;
+    gap: 3rem;
+    padding: 3rem 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pagination {
+    gap: 6rem;
+  }
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: black;
+  font-weight: 700;
+  font-size: 0.875rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+@media (min-width: 768px) {
+  .navButton {
+    gap: 0.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .navButton {
+    font-size: 1.25rem;
+  }
+}
+
+.navButton span {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .navButton span {
+    display: inline;
+  }
+}
+
+.navButton:hover {
+  opacity: 0.7;
+}
+
+.navButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.arrow {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.arrowPrev {
+  transform: rotate(-135deg);
+}
+
+.pages {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .pages {
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pages {
+    gap: 1rem;
+  }
+}
+
+.pageButton {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .pageButton {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pageButton {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+.pageButton.active {
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.pageButton:not(.active) {
+  background-color: white;
+  color: black;
+  border: 1px solid #dddddd;
+}
+
+.pageButton:not(.active):hover {
+  background-color: #f3f4f6;
+}
