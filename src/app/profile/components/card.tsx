@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import styles from "./card.module.css";
 
 interface CardProps {
@@ -18,7 +19,7 @@ export function Card({ title, category, author, timeAgo, image, className = "" }
       {/* Image placeholder */}
       <div className={styles.imageContainer}>
         {image ? (
-          <img src={image} alt={title} className={styles.image} />
+          <Image src={image} alt={title} className={styles.image} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" style={{ objectFit: "cover" }} />
         ) : (
           <div className={styles.placeholder}></div>
           // <svg className={styles.placeholder} viewBox="0 0 467 305">
