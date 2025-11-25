@@ -1,0 +1,52 @@
+.button {
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+/* ヘッダーのSign Upボタン用 */
+.primary {
+  width: 140px;
+  height: 45px;
+  background-color: #383838;
+  color: #ffffff;
+  border: 1px solid #383838;
+  border-radius: 30px;
+}
+
+.primary:hover {
+  background-color: #4a4a4a;
+}
+
+/* ヘッダーのLoginボタン用 */
+.secondary {
+  width: 140px;
+  height: 45px;
+  background-color: transparent;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 30px;
+}
+
+.secondary:hover {
+  background-color: #f0f0f0;
+}
+
+/* フォームのSign Upボタン（強調アクション用） */
+.accent {
+  width: 35%;
+  height: 55px;
+  background-color: #18a0fb;
+  color: #ffffff;
+  border: none;
+  border-radius: 40px;
+  font-size: 20px;
+  font-weight: 580;
+  margin-top: 20px;
+}
+
+.accent:hover {
+  background-color: #1589d6;
+}

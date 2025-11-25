@@ -1,20 +1,12 @@
+import { Header } from './(components)/Header';
+import SignUpForm from './(components)/SignUpForm';
+import styles from './page.module.css';
 
-export default function SignUp() {
+export default function SignUpPage() {
     return (
-        <div>
-            <div>
-                <h1>Sign Up</h1>
-            </div>
-            <div>
-                <p>Name</p>
-            </div>
-            <div>
-                <p>Email</p>
-            </div>
-            <div>
-                <p>Password</p>
-            </div>
-
+        <div className={styles.container}>
+            <Header />
+            <SignUpForm />
         </div>
     );
 }
