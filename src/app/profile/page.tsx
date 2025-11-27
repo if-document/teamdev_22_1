@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "./components/button";
-import { Card } from "./components/card";
-import { Dropdown, DropdownMenu, DropdownItem } from "./components/dropdown-menu";
-import { Pagination } from "./components/pagination";
+import { Button } from "./(components)/button";
+import { Card } from "./(components)/card";
+import { Dropdown, DropdownMenu, DropdownItem } from "./(components)/dropdown-menu";
+import { Pagination } from "./(components)/pagination";
 import styles from "./page.module.css";
 
 export default function ProfilePage() {
