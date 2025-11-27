@@ -1,198 +1,299 @@
+/* ページ全体 */
+
+.pageWrapper {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* ヘッダー */
 
 .header {
-    background-color: #D9D9D9;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
+  background-color: #d9d9d9;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .userNav {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .navItem {
-    display: flex;
-    align-items: center;
-    gap: 50px;
-    margin-right: 32px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-right: 32px;
 }
 
 .userNav button {
-    background-color: #383838;
-    color: white;
-    border: none;
-    width: 180px;
-    height: 60px;
-    font-size: 25px;
-    border-radius: 50px;
-    padding: 8px 20px;
-    cursor: pointer;
+  background-color: #383838;
+  color: white;
+  border: none;
+  width: 150px;
+  height: 50px;
+  font-size: 20px;
+  border-radius: 50px;
+  padding: 8px 20px;
+  cursor: pointer;
 }
 
 .profileAvatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color:#BABABA;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #bababa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .userIcon {
-    width: 35.75px;
-    height: 41.96px;
-    color: #151515;
-    fill: currentColor;
-    display:block;
+  width: 30px;
+  height: 30px;
+  color: #151515;
+  fill: currentColor;
+  display: block;
 }
-
-
 
 /* Title */
 
 .title {
-    display: flex;
-    justify-items: flex-start;
-    align-items: center;
-    margin-top: 89px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 26px;
-    gap: 50px;
-    font-size: 75px;
-    width: 1462px;
+  display: flex;
+  justify-items: flex-start;
+  align-items: center;
+  margin-top: 89px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 26px;
+  gap: 50px;
+  font-size: 25px;
+  width: 100%;
+  width: calc(100% - 2rem);
+  max-width: 800px;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .title input {
-    font-size: 75px;
-    flex: 1;
-    border: none;
-    outline: none;
+  font-size: 20px;
+  flex: 1;
+  border: none;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
 }
-
 
 /* 画像アップロード欄 */
 
 .uploadArea {
-    border: 2px dotted #000000;
-    width: 1462px;
-    height: 602px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 47px;
-    border-radius: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  border: 2px dotted #000000;
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 47px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 1rem;
 }
 
 .iconWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
 }
 
-
 .uploadIcon {
-    width: 100px;
-    height: 108px;
-    color: #94A2AB;
-    margin-bottom: 100px;
+  width: 100px;
+  height: 108px;
+  color: #94a2ab;
+  margin-bottom: 50px;
 }
 
 .iconWrapper button {
-    width: 377px;
-    height: 123px;
-    background-color: #18A0FB;
-    color: white;
-    font-size: 33px;
-    border: none;
-    border-radius: 75px;
-    cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  width: 300px;
+  height: 100px;
+  background-color: #18a0fb;
+  color: white;
+  font-size: 20px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
 }
-
 
 /* カテゴリー */
 
 .category {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    width: 1462px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 30px;
-    font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 30px;
+  font-size: 16px;
+  box-sizing: border-box;
+  padding: 0 1rem;
 }
 
 .category label {
-    width: 240px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+  width: 240px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .category select {
-    width: 240px;
-    height: 40px;
-    border-color: #D9D9D9;
-    border-radius: 7px;
+  width: 240px;
+  height: 40px;
+  border-color: #d9d9d9;
+  border-radius: 7px;
 }
 
-
-/* 本文　入力欄 */
+/* 本文 入力欄 */
 
 .contentWrapper {
-    width: 1462px;
-    height: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 60px;
-    border-radius: 30px;
-    background-color: #D9D9D940;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    border: none;
-    padding: 40px 55px;
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 60px;
+  border-radius: 30px;
+  background-color: #d9d9d940;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  border: none;
+  padding: 40px 55px;
+  box-sizing: border-box;
 }
 
 .contentWrapper textarea {
-    width: 100%;
-    height: 100%;
-    font-size: 16px;
-    line-height: 1.6;
-    background-color: transparent;
-    resize: none;
-    border: none;
-    outline: none;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: transparent;
+  resize: none;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
 }
 
-
-/* ボタン */
+/* Createボタン */
 
 .createButton {
-    margin-left: auto;
-    margin-right: auto;
-    width: 1462px;
-    display: flex;
-    justify-content: flex-end;
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  padding: 0 1rem;
 }
 
 .createButton button {
-    width: 300px;
-    height: 60px;
-    background-color: #18A0FB;
-    border-radius: 8px;
-    border: none;
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 100px;
-    cursor: pointer;
+  width: 250px;
+  height: 50px;
+  background-color: #18a0fb;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 100px;
+  cursor: pointer;
+}
+
+/* レスポンシブ対応 */
+
+@media (max-width: 1440px) {
+  /* 左右の余白設定 */
+  .title,
+  .uploadArea,
+  .category,
+  .contentWrapper,
+  .createButton {
+    width: calc(100% - 4rem);
+  }
+
+  /* 画像アップロード欄 */
+  .uploadArea {
+    height: clamp(200px, 25vw, 400px);
+  }
+
+  .uploadIcon {
+    width: clamp(40px, 5vw, 100px);
+    height: clamp(43px, 5.4vw, 108px);
+    margin-bottom: clamp(5px, 1vw, 50px);
+  }
+
+  .iconWrapper {
+    gap: clamp(10px, 1.5vw, 30px);
+    padding: clamp(10px, 1.5vw, 20px);
+  }
+
+  .iconWrapper button {
+    width: clamp(150px, 18vw, 300px);
+    height: clamp(50px, 6vw, 100px);
+    font-size: clamp(13px, 1.3vw, 20px);
+  }
+
+  /* Title */
+  .title {
+    margin-top: clamp(40px, 6vw, 89px);
+    font-size: clamp(20px, 2vw, 25px);
+  }
+
+  .title input {
+    font-size: clamp(16px, 1.6vw, 20px);
+  }
+
+  /* 本文 入力欄 */
+  .contentWrapper {
+    height: clamp(250px, 30vw, 400px);
+    padding: clamp(20px, 3vw, 40px) clamp(30px, 4vw, 55px);
+  }
+
+  .contentWrapper textarea {
+    font-size: clamp(14px, 1.2vw, 16px);
+  }
+
+  /* カテゴリー */
+  .category {
+    font-size: clamp(14px, 1.2vw, 16px);
+  }
+
+  .category label {
+    width: clamp(180px, 18vw, 240px);
+    height: clamp(35px, 3vw, 40px);
+  }
+
+  .category select {
+    width: clamp(180px, 18vw, 240px);
+    height: clamp(35px, 3vw, 40px);
+    font-size: clamp(14px, 1.2vw, 16px);
+  }
+
+  /* Createボタン */
+  .createButton button {
+    width: clamp(150px, 18vw, 250px);
+    height: clamp(40px, 3.5vw, 50px);
+    font-size: clamp(14px, 1.4vw, 20px);
+  }
 }
