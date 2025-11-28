@@ -1,10 +1,6 @@
 import styles from "./styles.module.css";
 
-export default async function ArticlePage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function ArticlePage({ params }: { params: { id: string } }) {
   return (
     <div className={styles.container}>
       {/* ヘッダーの Login と SignUp ボタン */}
@@ -32,12 +28,12 @@ export default async function ArticlePage({
           </div>
 
           <div className={styles.textContent}>
-          {/* 1つ目の段落*/}
+            {/* 1つ目の段落*/}
             <div className={styles.textGroup}>
               <div className={styles.textBar} style={{ width: "90%" }}></div>
               <div className={styles.textBar} style={{ width: "85%" }}></div>
             </div>
-          {/* 2つ目の段落*/}
+            {/* 2つ目の段落*/}
             <div className={styles.textGroup}>
               <div className={styles.textBar} style={{ width: "95%" }}></div>
               <div className={styles.textBar} style={{ width: "88%" }}></div>
@@ -54,11 +50,7 @@ export default async function ArticlePage({
 
           {/* テキスト入力欄 */}
           <div className={styles.commentInputArea}>
-            <input
-              type="text"
-              placeholder="Your Comment..."
-              className={styles.commentInput}
-            />
+            <input type="text" placeholder="Your Comment..." className={styles.commentInput} />
             <button className={styles.commentButton}>Comment</button>
           </div>
 
@@ -101,5 +93,3 @@ export default async function ArticlePage({
     </div>
   );
 }
-
-

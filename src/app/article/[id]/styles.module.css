@@ -1,4 +1,3 @@
-
 /* 全体のレイアウトとヘッダー */
 .container {
   min-height: 100vh;
@@ -20,7 +19,6 @@
   display: flex;
   gap: 16px;
 }
-
 
 /* ボタンのデザイン */
 .loginButton {
@@ -52,7 +50,6 @@
 .signUpButton:hover {
   background-color: #1f2937;
 }
-
 
 /* メインコンテンツ（ブログ記事部分） */
 .main {
@@ -87,8 +84,6 @@
   margin: 0;
 }
 
-
-
 /* アイコン */
 .userIcon {
   width: 40px;
@@ -121,7 +116,6 @@
   position: absolute;
   bottom: 4px;
 }
-
 
 /* 仮のテキスト */
 .imagePlaceholder {
@@ -162,7 +156,6 @@
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-
 .textContent {
   display: flex;
   flex-direction: column;
@@ -182,8 +175,6 @@
   gap: 12px;
   margin-bottom: 24px;
 }
-
-
 
 /* コメントセクション(記事下部のコメント欄) */
 .commentsSection {
@@ -324,4 +315,3 @@
   color: #3b82f6;
   margin: 0;
 }
-
