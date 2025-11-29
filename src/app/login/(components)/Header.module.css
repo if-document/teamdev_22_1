@@ -1,0 +1,43 @@
+.header {
+  width: 100%;
+  background-color: #d9d9d9;
+  padding: 20px 32px;
+  box-sizing: border-box;
+}
+
+.inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 32px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 18px;
+  text-decoration: none;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+
+.outline {
+  background-color: #d9d9d9;
+  color: #000;
+}
+
+.filled {
+  background-color: #333;
+  border-color: #333;
+  color: #fff;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
