@@ -1,0 +1,91 @@
+.header {
+  width: 100%;
+  background-color: #d9d9d9;
+  padding: 20px 32px;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.createBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 1rem;
+  background-color: #383838;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  outline: none;
+}
+
+.createBtn:hover {
+  background-color: #4a4a4a;
+}
+
+.createBtn:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 4px #6b7280;
+}
+
+.userBtn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background-color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+@media (min-width: 768px) {
+  .userBtn {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+}
+
+.userBtn:hover {
+  opacity: 0.8;
+}
+
+.userIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .userIcon {
+    width: 2rem;
+    height: 2rem;
+  }
+}

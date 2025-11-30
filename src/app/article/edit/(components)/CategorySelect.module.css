@@ -1,0 +1,69 @@
+.container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+}
+
+.selectWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+
+.selectContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.select {
+  width: 200px;
+  padding: 10px 40px 10px 16px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000;
+  cursor: pointer;
+  appearance: none;
+  outline: none;
+}
+
+.select:hover {
+  opacity: 0.8;
+}
+
+.select:focus {
+  border-color: #000;
+}
+
+.arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #000;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .container {
+    justify-content: stretch;
+  }
+
+  .selectWrapper {
+    width: 100%;
+  }
+
+  .select {
+    width: 100%;
+  }
+}
