@@ -21,6 +21,15 @@
   color: #000;
   margin: 0;
   padding: 0 0 16px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-family: inherit;
+}
+
+.pageTitle::placeholder {
+  color: #9ca3af;
 }
 
 @media (max-width: 768px) {

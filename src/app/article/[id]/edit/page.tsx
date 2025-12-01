@@ -31,7 +31,13 @@ export default function EditPage() {
 
       <main className={styles.main}>
         <div className={styles.content}>
-          <h1 className={styles.pageTitle}>Title |</h1>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title"
+            className={styles.pageTitle}
+          />
 
           <ImageUpload onImageSelect={handleImageSelect} previewUrl={previewUrl} />
 
