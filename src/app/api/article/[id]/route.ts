@@ -1,34 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
-import { Database } from "@/types/supabase";
-
-async function createClient() {
-  const cookieStore = await cookies();
-
-  return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value }) => cookieStore.set(name, value));
-          } catch {
-            // Server Componentからの呼び出しの場合は無視
-          }
-        },
-      },
-    },
-  );
-}
+import { supabase as createClient } from "@/libs/supabase/server";
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const supabase = await createClient();
+    const supabase = await createClient;
 
     // 認証チェック: ログインユーザーを取得
     const {
