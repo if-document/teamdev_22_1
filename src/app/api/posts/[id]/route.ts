@@ -56,10 +56,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   }
 }
 
-/**
- * 記事詳細を取得するAPI
- * GET /api/article/[id]
- */
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
