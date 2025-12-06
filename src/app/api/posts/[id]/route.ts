@@ -1,10 +1,6 @@
 import { supabase } from '@/libs/supabase/server';
 import { NextResponse, NextRequest } from 'next/server';
 
-/**
- * 記事詳細を取得するAPI
- * GET /api/article/[id]
- */
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
