@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase as createClient } from "@/libs/supabase/server";
+import { supabase } from "@/libs/supabase/client";
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const supabase = await createClient;
-
-    // 認証チェック: ログインユーザーを取得
     const {
       data: { user },
       error: authError,
