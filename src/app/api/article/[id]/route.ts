@@ -53,8 +53,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 //記事データの更新
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const supabase = await createClient;
-
     // ユーザーの認証を確認
     const {
       data: { user },
