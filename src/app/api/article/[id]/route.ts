@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/libs/supabase/server"; // ← createClientをimport
+import { createClient } from "@/libs/supabase/server";
 
 /**
  * 記事を削除するAPI
