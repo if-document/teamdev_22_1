@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/libs/supabase/client";
+import { createClient } from "@/libs/supabase/server";
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+/**
+ * 記事を削除するAPI
+ * DELETE /api/article/[id]
+ */
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const supabase = await createClient();
+    const { id } = await params;
+
+    // 認証チェック: ログインユーザーを取得
     const {
       data: { user },
       error: authError,
@@ -12,7 +20,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
     }
 
-    const articleId = parseInt(params.id);
+    const articleId = parseInt(id);
 
     if (isNaN(articleId)) {
       return NextResponse.json({ error: "無効な記事IDです" }, { status: 400 });
@@ -43,6 +51,50 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     }
 
     return NextResponse.json({ message: "記事を削除しました" }, { status: 200 });
+  } catch (error) {
+    console.error("予期しないエラー:", error);
+    return NextResponse.json({ error: "サーバーエラーが発生しました" }, { status: 500 });
+  }
+}
+
+/**
+ * 記事詳細を取得するAPI
+ * GET /api/article/[id]
+ */
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const supabase = await createClient();
+    const { id } = await params;
+
+    // IDを数値に変換
+    const articleId = parseInt(id, 10);
+
+    // IDが無効な場合
+    if (isNaN(articleId)) {
+      return NextResponse.json({ error: "無効な記事IDです" }, { status: 400 });
+    }
+
+    // Supabaseから記事を取得（必要なフィールドのみ）
+    const { data, error } = await supabase
+      .from("posts")
+      .select("id, title, content, image_path, category_id, user_id, created_at, updated_at")
+      .eq("id", articleId)
+      .single();
+
+    // エラーハンドリング
+    if (error) {
+      console.error("Supabase error:", error);
+
+      // レコードが見つからない場合
+      if (error.code === "PGRST116") {
+        return NextResponse.json({ error: "記事が見つかりません" }, { status: 404 });
+      }
+
+      return NextResponse.json({ error: "記事の取得に失敗しました" }, { status: 500 });
+    }
+
+    // 成功時
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error("予期しないエラー:", error);
     return NextResponse.json({ error: "サーバーエラーが発生しました" }, { status: 500 });
