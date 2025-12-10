@@ -1,4 +1,5 @@
 import styles from "./styles.module.css";
+import Button from "./components/Button"; // ← コンポーネントを作成、インポートしています
 
 export default async function ArticlePage({ params }: { params: { id: string } }) {
   return (
@@ -42,6 +43,12 @@ export default async function ArticlePage({ params }: { params: { id: string } }
               <div className={styles.textBar} style={{ width: "80%" }}></div>
             </div>
           </div>
+        </div>
+
+        {/* 記事アクションボタン */}
+        <div className={styles.actionButtons}>
+          <Button>Edit</Button>
+          <Button>Delete</Button>
         </div>
 
         {/*コメントセクション(記事下部のコメント欄)  */}
