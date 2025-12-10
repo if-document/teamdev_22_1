@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/libs/supabase/client";
+import { createClient } from "@/libs/supabase/server";
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+/**
+ * 記事を削除するAPI
+ * DELETE /api/article/[id]
+ */
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const supabase = await createClient();
+    const { id } = await params;
+
+    // 認証チェック: ログインユーザーを取得
     const {
       data: { user },
       error: authError,
@@ -12,7 +20,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
     }
 
-    const articleId = parseInt(params.id);
+    const articleId = parseInt(id);
 
     if (isNaN(articleId)) {
       return NextResponse.json({ error: "無効な記事IDです" }, { status: 400 });
@@ -49,10 +57,10 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
   }
 }
 
-
 //記事データの更新
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await params;
     // ユーザーの認証を確認
     const {
       data: { user },
@@ -62,66 +70,101 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     if (authError || !user) {
       return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
     }
-
     // 記事IDの確認
-    const articleId = parseInt(params.id);
-    if (isNaN(articleId)) {
-      return NextResponse.json({ error: "無効な記事IDです" }, { status: 400 });
+    const articleId = parseInt(id);
+
+    /**
+     * 記事詳細を取得するAPI
+     * GET /api/article/[id]
+     */
+    export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+      try {
+        const supabase = await createClient();
+        const { id } = await params;
+
+        // IDを数値に変換
+        const articleId = parseInt(id, 10);
+
+        // IDが無効な場合
+        if (isNaN(articleId)) {
+          return NextResponse.json({ error: "無効な記事IDです" }, { status: 400 });
+        }
+
+        // (要件：該当記事を更新できるのは、記事を作成した本人のみ)
+        // supabaseに問い合わせ(記事IDに該当する作成者本人のIDを取得)
+        const { data: article, error: fetchError } = await supabase
+          .from("posts")
+          .select("user_id")
+          .eq("id", articleId)
+          .single();
+
+        // 記事がない場合
+        if (fetchError || !article) {
+          return NextResponse.json({ error: "記事が見つかりません" }, { status: 404 });
+        }
+
+        // 記事はあるが、権限がない(今のユーザーが作成者本人ではない)
+        if (article.user_id !== user.id) {
+          return NextResponse.json({ error: "この記事を更新する権限がありません" }, { status: 403 });
+        }
+
+        // 更新データを受け取る
+        const body = await request.json();
+        const { title, content, category_id, image_path } = body;
+
+        // 要件をみたしているか確認(要件:category_id, title, content, image_path, updated_at は更新必須)
+        if (!title || !content || !category_id || !image_path) {
+          return NextResponse.json({ error: "タイトル、本文、カテゴリ、画像はすべて必須項目です" }, { status: 400 });
+        }
+
+        // 更新を実行
+        const { error: updateError } = await supabase
+          .from("posts")
+          .update({
+            title,
+            content,
+            category_id,
+            image_path,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", articleId);
+
+        if (updateError) {
+          console.error("更新のエラー:", updateError);
+          return NextResponse.json({ error: "記事の更新に失敗しました" }, { status: 500 });
+        }
+
+        //結果を返す
+        return NextResponse.json({ message: "記事を更新しました" }, { status: 200 });
+      } catch (error) {
+        console.error("予期しないエラーが発生しました:", error);
+        return NextResponse.json({ error: "サーバーのエラーが発生しました" }, { status: 500 });
+      }
     }
 
-    // (要件：該当記事を更新できるのは、記事を作成した本人のみ)
-    //supabaseに問い合わせ(記事IDに該当する作成者本人のIDを取得)
-    const { data: article, error: fetchError } = await supabase
+    // Supabaseから記事を取得（必要なフィールドのみ）
+    const { data, error } = await supabase
       .from("posts")
-      .select("user_id")
+      .select("id, title, content, image_path, category_id, user_id, created_at, updated_at")
       .eq("id", articleId)
       .single();
 
-    // 記事がない場合
-    if (fetchError || !article) {
-      return NextResponse.json({ error: "記事が見つかりません" }, { status: 404 });
-    }
-    
-    // 記事はあるが、権限がない(今のユーザーが作成者本人ではない)
-    if (article.user_id !== user.id) {
-      return NextResponse.json({ error: "この記事を更新する権限がありません" }, { status: 403 });
-    }
+    // エラーハンドリング
+    if (error) {
+      console.error("Supabase error:", error);
 
-    // 更新データを受け取る
-    const body = await request.json();
-    const { title, content, category_id, image_path } = body;
+      // レコードが見つからない場合
+      if (error.code === "PGRST116") {
+        return NextResponse.json({ error: "記事が見つかりません" }, { status: 404 });
+      }
 
-    // 要件をみたしているか確認(要件:category_id, title, content, image_path, updated_at は更新必須)
-    if (!title || !content || !category_id || !image_path) {
-      return NextResponse.json(
-        { error: "タイトル、本文、カテゴリ、画像はすべて必須項目です" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "記事の取得に失敗しました" }, { status: 500 });
     }
 
-    // 更新を実行
-    const { error: updateError } = await supabase
-      .from("posts")
-      .update({
-        title,
-        content,
-        category_id,
-        image_path,
-        updated_at: new Date().toISOString(), 
-      })
-      .eq("id", articleId);
-
-    if (updateError) {
-      console.error("更新のエラー:", updateError);
-      return NextResponse.json({ error: "記事の更新に失敗しました" }, { status: 500 });
-    }
-
-    //結果を返す
-    return NextResponse.json({ message: "記事を更新しました" }, { status: 200 });
-
+    // 成功時
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error("予期しないエラーが発生しました:", error);
-    return NextResponse.json({ error: "サーバーのエラーが発生しました" }, { status: 500 });
+    console.error("予期しないエラー:", error);
+    return NextResponse.json({ error: "サーバーエラーが発生しました" }, { status: 500 });
   }
 }
-
