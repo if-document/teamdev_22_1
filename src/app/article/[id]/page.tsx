@@ -48,7 +48,7 @@ export default async function ArticlePage({ params }: { params: { id: string } }
         {/* 記事アクションボタン */}
         <div className={styles.actionButtons}>
           <Button>Edit</Button>
-          <Button>Delete</Button>
+          <Button variant="red">Delete</Button>
         </div>
 
         {/*コメントセクション(記事下部のコメント欄)  */}

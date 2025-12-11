@@ -337,6 +337,15 @@
   background-color: #2563eb;
 }
 
+/* 【追加】赤色ボタン（削除用） */
+.buttonRed {
+  background-color: #ef4444;
+}
+
+.buttonRed:hover {
+  background-color: #dc2626;
+}
+
 /* 記事アクションボタンの配置 */
 .actionButtons {
   display: flex;
