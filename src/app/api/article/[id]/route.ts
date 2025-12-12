@@ -57,7 +57,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   }
 }
 
-/*記事を更新するAPI*/
+//記事を更新するAPI
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const supabase = await createClient();
@@ -95,8 +95,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "この記事を更新する権限がありません" }, { status: 403 });
     }
 
-    const body = await request.json();
-    const { title, content, category_id, image_path } = body;
+    // 【修正箇所】request.json() から request.formData() に変更
+    const formData = await request.formData();
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+    const category_id = formData.get("category_id") as string;
+    const image_path = formData.get("image_path") as string;
 
     if (!title || !content || !category_id || !image_path) {
       return NextResponse.json({ error: "タイトル、本文、カテゴリ、画像はすべて必須項目です" }, { status: 400 });
