@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/libs/supabase/server";
+import { ARTICLE_IMAGES_BUCKET } from "@/const/supabase";
 
 /**
  * 記事を削除するAPI
@@ -95,15 +96,37 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: "この記事を更新する権限がありません" }, { status: 403 });
     }
 
-    // 【修正箇所】request.json() から request.formData() に変更
     const formData = await request.formData();
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
-    const category_id = formData.get("category_id") as string;
-    const image_path = formData.get("image_path") as string;
+    const category_id = parseInt(formData.get("category_id") as string, 10);
+    const imageFile = formData.get("image") as File | null;
+    const currentImagePath = formData.get("image_path") as string;
 
-    if (!title || !content || !category_id || !image_path) {
-      return NextResponse.json({ error: "タイトル、本文、カテゴリ、画像はすべて必須項目です" }, { status: 400 });
+    if (!title || !content || isNaN(category_id)) {
+      return NextResponse.json({ error: "タイトル、本文、カテゴリは必須項目です" }, { status: 400 });
+    }
+    let finalImagePath = currentImagePath;
+    if (imageFile && imageFile.size > 0) {
+      const ext = imageFile.name.split(".").pop() || "png";
+      const filePath = `${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from(ARTICLE_IMAGES_BUCKET).upload(filePath, imageFile, {
+        contentType: imageFile.type,
+        upsert: true,
+      });
+
+      if (uploadError) {
+        console.error("画像アップロードエラー:", uploadError);
+        return NextResponse.json({ error: "画像のアップロードに失敗しました" }, { status: 500 });
+      }
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from(ARTICLE_IMAGES_BUCKET).getPublicUrl(filePath);
+
+      finalImagePath = publicUrl;
+    }
+    if (!finalImagePath) {
+      return NextResponse.json({ error: "画像は必須です" }, { status: 400 });
     }
 
     // 更新実行
@@ -113,7 +136,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         title,
         content,
         category_id,
-        image_path,
+        image_path: finalImagePath,
         updated_at: new Date().toISOString(),
       })
       .eq("id", articleId);
