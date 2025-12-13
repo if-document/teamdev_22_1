@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import styles from "./page.module.css";
 import { Header } from "./(components)/Header";
 import { PostCard } from "./(components)/PostCard";
@@ -32,16 +32,58 @@ export default function HomePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedAuthor, setSelectedAuthor] = useState<string | null>(null);
 
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  type DbPost = {
+    id: number;
+    user_id: string;
+    category_id: number;
+    title: string;
+    content: string;
+    image_path: string;
+    created_at: string;
+    updated_at: string;
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch("/api/posts");
+        if (!res.ok) throw new Error("記事データの取得に失敗しました");
+        const data = await res.json();
+
+        const formatted = data.map((p: DbPost) => {
+          return {
+            id: p.id,
+            title: p.title,
+            category: String(p.category_id),
+            author: p.user_id,
+            createdAt: p.created_at,
+            imageUrl: p.image_path,
+            excerpt: p.content,
+          };
+        });
+        setPosts(formatted);
+      } catch (error) {
+        console.error("記事データの取得に失敗しました：", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
+
   const filteredPosts = useMemo(() => {
     const lower = searchValue.toLowerCase();
 
-    return allMockPosts.filter((post) => {
+    return posts.filter((post) => {
       const matchSearch = lower ? post.title.toLowerCase().includes(lower) : true;
       const matchAuthor = selectedAuthor ? post.author === selectedAuthor : true;
 
       return matchSearch && matchAuthor;
     });
-  }, [searchValue, selectedAuthor]);
+  }, [posts, searchValue, selectedAuthor]);
 
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE));
 
