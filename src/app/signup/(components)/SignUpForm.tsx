@@ -12,7 +12,6 @@ export default function SignUpForm() {
     email: "",
     password: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +21,6 @@ export default function SignUpForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
     setError(null);
 
     try {
@@ -46,8 +44,6 @@ export default function SignUpForm() {
     } catch (err) {
       console.error("Signup error:", err);
       setError("ネットワークエラーが発生しました");
-    } finally {
-      setIsLoading(false);
     }
   };
 
