@@ -1,29 +1,56 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Button from "./Button";
 import styles from "./SignUpForm.module.css";
 
 export default function SignUpForm() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (error) setError(null);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Sign Up Data:", formData);
-    alert("Sign Up機能は実装中です(モックデータ)");
+    setError(null);
+
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || "ユーザー登録に失敗しました");
+        return;
+      }
+
+      alert("ユーザー登録が完了しました！");
+      router.push("/login");
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError("ネットワークエラーが発生しました");
+    }
   };
 
   return (
     <div className={styles.formContainer}>
       <h1 className={styles.title}>Sign Up</h1>
+      {error && <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>}
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
           <label htmlFor="name" className={styles.label}>
