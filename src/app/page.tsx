@@ -6,24 +6,7 @@ import { Header } from "./(components)/Header";
 import { PostCard } from "./(components)/PostCard";
 import { SearchBar } from "./(components)/SearchBar";
 import { Pagination } from "./(components)/Pagination";
-import type { Post } from "./(types)/Post";
-
-// とりあえずのモックデータ
-const BASE_TIME = new Date("2025-11-23T00:00:00.000Z").getTime();
-const allMockPosts: Post[] = Array.from({ length: 90 }, (_, i) => {
-  const minutesAgo = i * 5;
-  const createdAt = new Date(BASE_TIME - minutesAgo * 60 * 1000).toISOString(); //
-
-  return {
-    id: i + 1,
-    title: `Post Title ${i + 1}`,
-    category: "Category",
-    author: i % 2 === 0 ? "Alice" : "Bob",
-    createdAt,
-    excerpt:
-      "サンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキストサンプルテキスト",
-  };
-});
+import type { Post, DbPost } from "./(types)/Post";
 
 const PAGE_SIZE = 9;
 
@@ -34,17 +17,6 @@ export default function HomePage() {
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-
-  type DbPost = {
-    id: number;
-    user_id: string;
-    category_id: number;
-    title: string;
-    content: string;
-    image_path: string;
-    created_at: string;
-    updated_at: string;
-  };
 
   useEffect(() => {
     const fetchPosts = async () => {
