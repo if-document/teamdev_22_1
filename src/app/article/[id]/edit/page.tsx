@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";  // ← useEffectを追加
-import { useParams, useRouter } from "next/navigation";  // ← 新規追加
+import { useState, useEffect } from "react"; // ← useEffectを追加
+import { useParams, useRouter } from "next/navigation"; // ← 新規追加
 import styles from "./page.module.css";
 import Header from "./(components)/Header";
 import ImageUpload from "./(components)/ImageUpload";
@@ -57,7 +57,8 @@ export default function EditPage() {
   };
 
   // 新規追加：ローディング中の表示
-  const handleUpdate = async () => { // ← handleUpdateに名前を変更
+  const handleUpdate = async () => {
+    // ← handleUpdateに名前を変更
     try {
       const formData = new FormData();
       formData.append("title", title);
@@ -103,13 +104,9 @@ export default function EditPage() {
                 placeholder="Title"
                 className={styles.pageTitle}
               />
-
               <ImageUpload onImageSelect={handleImageSelect} previewUrl={previewUrl} />
-
               <CategorySelect value={category} onChange={setCategory} />
-
               <ContentEditor title={title} content={content} onTitleChange={setTitle} onContentChange={setContent} />
-
               <CreateButton onClick={handleUpdate} /> {/* ← handleCreateから変更 */}
             </>
           )}

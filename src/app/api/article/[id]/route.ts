@@ -53,17 +53,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const { id } = await params;
 
     // 認証チェック
-    // const {
-    //   data: { user },
-    //   error: authError,
-    // } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
 
-    // if (authError || !user) {
-    //   return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
-    // }
-
-    // 【テスト用】仮のユーザー情報を使う
-    const user = { id: "fc6b7e74-3257-459a-8862-8d5800c6ad22" }; // ← GET結果のuser_idを使用
+    if (authError || !user) {
+      return NextResponse.json({ error: "認証が必要です" }, { status: 401 });
+    }
 
     const articleId = parseInt(id);
 
@@ -72,68 +69,68 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // 記事の存在確認と権限チェック
-const { data: article, error: fetchError } = await supabase
-  .from("posts")
-  .select("user_id, image_path")  // ← 修正
-  .eq("id", articleId)
-  .single();
+    const { data: article, error: fetchError } = await supabase
+      .from("posts")
+      .select("user_id")
+      .eq("id", articleId)
+      .single();
 
-if (fetchError || !article) {
-  return NextResponse.json({ error: "記事が見つかりません" }, { status: 404 });
-}
+    if (fetchError || !article) {
+      return NextResponse.json({ error: "記事が見つかりません" }, { status: 404 });
+    }
 
-// 作成者本人かチェック
-if (article.user_id !== user.id) {
-  return NextResponse.json({ error: "この記事を更新する権限がありません" }, { status: 403 });
-}
+    // 作成者本人かチェック
+    if (article.user_id !== user.id) {
+      return NextResponse.json({ error: "この記事を更新する権限がありません" }, { status: 403 });
+    }
 
-const formData = await request.formData();
-const title = formData.get("title") as string;
-const content = formData.get("content") as string;
-const category_id = parseInt(formData.get("category_id") as string, 10);
-const imageFile = formData.get("image") as File | null;
+    const formData = await request.formData();
+    const title = formData.get("title") as string;
+    const content = formData.get("content") as string;
+    const category_id = parseInt(formData.get("category_id") as string, 10);
+    const imageFile = formData.get("image") as File | null;
 
-if (!title || !content || isNaN(category_id)) {
-  return NextResponse.json({ error: "タイトル、本文、カテゴリは必須項目です" }, { status: 400 });
-}
+    if (!title || !content || isNaN(category_id)) {
+      return NextResponse.json({ error: "タイトル、本文、カテゴリは必須項目です" }, { status: 400 });
+    }
 
-let finalImagePath;
+    let finalImagePath;
 
-if (imageFile && imageFile.size > 0) {
-  // 新しい画像がアップロードされた場合
-  const ext = imageFile.name.split(".").pop() || "png";
-  const filePath = `${Date.now()}.${ext}`;
-  const { error: uploadError } = await supabase.storage.from(ARTICLE_IMAGES_BUCKET).upload(filePath, imageFile, {
-    contentType: imageFile.type,
-    upsert: true,
-  });
+    if (imageFile && imageFile.size > 0) {
+      const ext = imageFile.name.split(".").pop() || "png";
+      const filePath = `${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from(ARTICLE_IMAGES_BUCKET).upload(filePath, imageFile, {
+        contentType: imageFile.type,
+        upsert: true,
+      });
 
-  if (uploadError) {
-    console.error("画像アップロードエラー:", uploadError);
-    return NextResponse.json({ error: "画像のアップロードに失敗しました" }, { status: 500 });
-  }
+      if (uploadError) {
+        console.error("画像アップロードエラー:", uploadError);
+        return NextResponse.json({ error: "画像のアップロードに失敗しました" }, { status: 500 });
+      }
 
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from(ARTICLE_IMAGES_BUCKET).getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from(ARTICLE_IMAGES_BUCKET).getPublicUrl(filePath);
 
-  finalImagePath = publicUrl;
-} else {
-  // 新しい画像がない場合は、既存の画像パスを使う
-  finalImagePath = article.image_path;
-}
+      finalImagePath = publicUrl;
+    }
 
-// 更新実行
-const { error: updateError } = await supabase
-  .from("posts")
-  .update({
-    title,
-    content,
-    category_id,
-    image_path: finalImagePath,
-    updated_at: new Date().toISOString(),
-  })
-  .eq("id", articleId);
+    if (!finalImagePath) {
+      return NextResponse.json({ error: "画像は必須です" }, { status: 400 });
+    }
+
+    // 更新実行
+    const { error: updateError } = await supabase
+      .from("posts")
+      .update({
+        title,
+        content,
+        category_id,
+        image_path: finalImagePath,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", articleId);
 
     if (updateError) {
       console.error("更新エラー:", updateError);
@@ -202,3 +199,4 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     return NextResponse.json({ error: "サーバーエラーが発生しました" }, { status: 500 });
   }
 }
+
