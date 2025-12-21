@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react"; // ← useEffectを追加
-import { useParams, useRouter } from "next/navigation"; // ← 新規追加
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import Header from "./(components)/Header";
 import ImageUpload from "./(components)/ImageUpload";
@@ -10,11 +10,9 @@ import ContentEditor from "./(components)/ContentEditor";
 import CreateButton from "./(components)/CreateButton";
 
 export default function EditPage() {
-  // 新規追加 ---
   const params = useParams();
   const router = useRouter();
   const articleId = params.id as string;
-  // ここから既存 ---
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
