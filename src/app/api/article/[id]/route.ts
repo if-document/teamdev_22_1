@@ -199,4 +199,3 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     return NextResponse.json({ error: "サーバーエラーが発生しました" }, { status: 500 });
   }
 }
-

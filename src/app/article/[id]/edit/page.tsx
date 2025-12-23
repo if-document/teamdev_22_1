@@ -18,11 +18,10 @@ export default function EditPage() {
   const [content, setContent] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  // 新規追加：ローディング状態 ---
+  // ローディング状態
   const [loading, setLoading] = useState(true);
 
-  // 新規追加：記事データを取得
+  // 記事データを取得
   useEffect(() => {
     const fetchArticle = async () => {
       try {
@@ -54,9 +53,8 @@ export default function EditPage() {
     setPreviewUrl(preview);
   };
 
-  // 新規追加：ローディング中の表示
+  // ローディング中の表示
   const handleUpdate = async () => {
-    // ← handleUpdateに名前を変更
     try {
       const formData = new FormData();
       formData.append("title", title);
@@ -105,7 +103,7 @@ export default function EditPage() {
               <ImageUpload onImageSelect={handleImageSelect} previewUrl={previewUrl} />
               <CategorySelect value={category} onChange={setCategory} />
               <ContentEditor title={title} content={content} onTitleChange={setTitle} onContentChange={setContent} />
-              <CreateButton onClick={handleUpdate} /> {/* ← handleCreateから変更 */}
+              <CreateButton onClick={handleUpdate} />
             </>
           )}
         </div>
