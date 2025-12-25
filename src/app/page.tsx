@@ -21,7 +21,7 @@ export default function HomePage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch("/api/posts");
+        const res = await fetch("/api/article");
         if (!res.ok) throw new Error("記事データの取得に失敗しました");
         const data = await res.json();
 
@@ -30,7 +30,7 @@ export default function HomePage() {
             id: p.id,
             title: p.title,
             category: String(p.category_id),
-            author: p.user_id,
+            author: p.users?.name || "Unknown",
             createdAt: p.created_at,
             imageUrl: p.image_path,
             excerpt: p.content,
@@ -92,6 +92,7 @@ export default function HomePage() {
               {pagedPosts.map((post) => (
                 <PostCard
                   key={post.id}
+                  id={post.id}
                   title={post.title}
                   category={post.category}
                   author={post.author}
