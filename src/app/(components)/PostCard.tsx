@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./PostCard.module.css";
 
 type PostCardProps = {
+  id: number;
   title: string;
   category: string;
   author: string;
@@ -35,30 +37,39 @@ function formatRelativeTime(isoString: string) {
   return diffDay === 1 ? "a day ago" : `${diffDay} days ago`;
 }
 
-export function PostCard({ title, category, author, createdAt, imageUrl, excerpt, onAuthorClick }: PostCardProps) {
+export function PostCard({ id, title, category, author, createdAt, imageUrl, excerpt, onAuthorClick }: PostCardProps) {
   return (
     <article className={styles.card}>
-      <div className={styles.thumbnail}>
-        {imageUrl && (
-          <Image src={imageUrl} alt={title} fill className={styles.image} sizes="(max-width: 768px) 100vw, 30vw" />
-        )}
-      </div>
-
-      <div className={styles.body}>
-        <div className={styles.header}>
-          <h3 className={styles.title}>{title}</h3>
-          <button className={styles.categoryButton}>{category}</button>
+      <Link href={`/article/${id}`} className={styles.cardLink}>
+        <div className={styles.thumbnail}>
+          {imageUrl && (
+            <Image src={imageUrl} alt={title} fill className={styles.image} sizes="(max-width: 768px) 100vw, 30vw" />
+          )}
         </div>
 
-        <div className={styles.meta}>
-          <button type="button" className={styles.author} onClick={() => onAuthorClick?.(author)}>
-            {author}
-          </button>
-          <span className={styles.date}>{formatRelativeTime(createdAt)}</span>
-        </div>
+        <div className={styles.body}>
+          <div className={styles.header}>
+            <h3 className={styles.title}>{title}</h3>
+            <button className={styles.categoryButton}>{category}</button>
+          </div>
 
-        <p className={styles.excerpt}>{excerpt}</p>
-      </div>
+          <div className={styles.meta}>
+            <button
+              type="button"
+              className={styles.author}
+              onClick={(e) => {
+                e.preventDefault();
+                onAuthorClick?.(author);
+              }}
+            >
+              {author}
+            </button>
+            <span className={styles.date}>{formatRelativeTime(createdAt)}</span>
+          </div>
+
+          <p className={styles.excerpt}>{excerpt}</p>
+        </div>
+      </Link>
     </article>
   );
 }

@@ -13,6 +13,26 @@ type SupabaseStorageError = {
   statusCode?: number | string;
 };
 
+export async function GET() {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*, users(name)")
+      .order("created_at", { ascending: false });
+
+    if (error || !data) {
+      console.error("記事データの取得に失敗しました:", error);
+      return NextResponse.json({ error: "記事データの取得に失敗しました" }, { status: 500 });
+    }
+
+    return NextResponse.json(data);
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "サーバーエラーが発生しました" }, { status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const supabase = await createClient();
