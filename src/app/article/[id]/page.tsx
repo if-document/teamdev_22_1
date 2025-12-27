@@ -3,7 +3,7 @@ import Button from "./components/Button"; // ← コンポーネントを作成�
 import { DbPost } from "@/app/(types)/Post";
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export default async function ArticlePage({ params }: Props) {
