@@ -1,7 +1,28 @@
 import styles from "./styles.module.css";
 import Button from "./components/Button"; // ← コンポーネントを作成、インポートしています
+import { DbPost } from "@/app/(types)/Post";
 
-export default async function ArticlePage() {
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function ArticlePage({ params }: Props) {
+  const { id } = await params;
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const res = await fetch(`${baseUrl}/api/article/${id}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    return (
+      <div className={styles.container}>
+        <p>記事の取得に失敗しました。</p>
+      </div>
+    );
+  }
+
+  const article: DbPost = await res.json();
   return (
     <div className={styles.container}>
       {/* ヘッダーの Login と SignUp ボタン */}
@@ -19,29 +40,22 @@ export default async function ArticlePage() {
         <div className={styles.contentCard}>
           {/* Blog Title と User Icon */}
           <div className={styles.titleSection}>
-            <h1 className={styles.blogTitle}>Blog Title</h1>
+            <h1 className={styles.blogTitle}>{article.title}</h1>
             <div className={styles.userIcon}></div>
           </div>
 
           {/* 仮のテキスト */}
           <div className={styles.imagePlaceholder}>
-            <div className={styles.imageX}></div>
+            {article.image_path ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={article.image_path} alt={article.title} className={styles.imageX} />
+            ) : (
+              <div className={styles.imageX}></div>
+            )}
           </div>
 
           <div className={styles.textContent}>
-            {/* 1つ目の段落*/}
-            <div className={styles.textGroup}>
-              <div className={styles.textBar} style={{ width: "90%" }}></div>
-              <div className={styles.textBar} style={{ width: "85%" }}></div>
-            </div>
-            {/* 2つ目の段落*/}
-            <div className={styles.textGroup}>
-              <div className={styles.textBar} style={{ width: "95%" }}></div>
-              <div className={styles.textBar} style={{ width: "88%" }}></div>
-              <div className={styles.textBar} style={{ width: "92%" }}></div>
-              <div className={styles.textBar} style={{ width: "75%" }}></div>
-              <div className={styles.textBar} style={{ width: "80%" }}></div>
-            </div>
+            <p className={styles.articleContent}>{article.content}</p>
           </div>
         </div>
 

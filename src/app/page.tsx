@@ -7,6 +7,7 @@ import { PostCard } from "./(components)/PostCard";
 import { SearchBar } from "./(components)/SearchBar";
 import { Pagination } from "./(components)/Pagination";
 import type { Post, DbPost } from "./(types)/Post";
+import Link from "next/link";
 
 const PAGE_SIZE = 9;
 
@@ -90,17 +91,19 @@ export default function HomePage() {
           <section aria-label="posts list">
             <div className={styles.grid}>
               {pagedPosts.map((post) => (
-                <PostCard
-                  key={post.id}
-                  id={post.id}
-                  title={post.title}
-                  category={post.category}
-                  author={post.author}
-                  createdAt={post.createdAt}
-                  imageUrl={post.imageUrl}
-                  excerpt={post.excerpt}
-                  onAuthorClick={handleAuthorClick}
-                />
+                <Link key={post.id} href={`/article/${post.id}`}>
+                  <PostCard
+                    key={post.id}
+                    id={post.id}
+                    title={post.title}
+                    category={post.category}
+                    author={post.author}
+                    createdAt={post.createdAt}
+                    imageUrl={post.imageUrl}
+                    excerpt={post.excerpt}
+                    onAuthorClick={handleAuthorClick}
+                  />
+                </Link>
               ))}
             </div>
           </section>
