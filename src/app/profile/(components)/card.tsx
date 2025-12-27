@@ -2,9 +2,11 @@
 
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./card.module.css";
 
 interface CardProps {
+  id: number;
   title: string;
   category: string;
   author: string;
@@ -13,9 +15,9 @@ interface CardProps {
   className?: string;
 }
 
-export function Card({ title, category, author, timeAgo, image, className = "" }: CardProps) {
+export function Card({ id, title, category, author, timeAgo, image, className = "" }: CardProps) {
   return (
-    <div className={`${styles.card} ${className}`}>
+    <Link href={`/article/${id}`} className={`${styles.card} ${className}`}>
       {/* Image placeholder */}
       <div className={styles.imageContainer}>
         {image ? (
@@ -54,6 +56,6 @@ export function Card({ title, category, author, timeAgo, image, className = "" }
           <div className={`${styles.descriptionLine} ${styles.descriptionLinePartial}`}></div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
