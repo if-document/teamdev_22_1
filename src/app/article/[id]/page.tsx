@@ -1,7 +1,74 @@
-import styles from "./styles.module.css";
-import Button from "./components/Button"; // ← コンポーネントを作成、インポートしています
+"use client";
 
-export default async function ArticlePage() {
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Image from "next/image";
+import styles from "./styles.module.css";
+import Button from "./components/Button";
+
+type Article = {
+  id: number;
+  title: string;
+  content: string;
+  image_path: string;
+  category_id: number;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export default function ArticlePage() {
+  const params = useParams();
+  const router = useRouter();
+  const articleId = params.id as string;
+
+  const [article, setArticle] = useState<Article | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // 記事データを取得
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        const res = await fetch(`/api/article/${articleId}`);
+        if (!res.ok) throw new Error("記事の取得に失敗しました");
+
+        const data = await res.json();
+        setArticle(data);
+      } catch (error) {
+        console.error("記事の取得エラー:", error);
+        alert("記事の取得に失敗しました");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (articleId) {
+      fetchArticle();
+    }
+  }, [articleId]);
+
+  // 削除処理
+  const handleDelete = async () => {
+    if (!confirm("本当に削除しますか？")) return;
+
+    try {
+      const res = await fetch(`/api/article/${articleId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("削除に失敗しました");
+
+      alert("記事を削除しました");
+      router.push("/");
+    } catch (error) {
+      console.error("削除エラー:", error);
+      alert("記事の削除に失敗しました");
+    }
+  };
+
+  if (loading) return <p>読み込み中...</p>;
+  if (!article) return <p>記事が見つかりません</p>;
+
   return (
     <div className={styles.container}>
       {/* ヘッダーの Login と SignUp ボタン */}
@@ -19,36 +86,28 @@ export default async function ArticlePage() {
         <div className={styles.contentCard}>
           {/* Blog Title と User Icon */}
           <div className={styles.titleSection}>
-            <h1 className={styles.blogTitle}>Blog Title</h1>
+            <h1 className={styles.blogTitle}>{article.title}</h1>
             <div className={styles.userIcon}></div>
           </div>
 
-          {/* 仮のテキスト */}
+          {/* 記事画像 */}
           <div className={styles.imagePlaceholder}>
-            <div className={styles.imageX}></div>
+            {article.image_path && article.image_path !== "{}" && (
+              <Image src={article.image_path} alt={article.title} fill className={styles.image} />
+            )}
           </div>
 
           <div className={styles.textContent}>
-            {/* 1つ目の段落*/}
-            <div className={styles.textGroup}>
-              <div className={styles.textBar} style={{ width: "90%" }}></div>
-              <div className={styles.textBar} style={{ width: "85%" }}></div>
-            </div>
-            {/* 2つ目の段落*/}
-            <div className={styles.textGroup}>
-              <div className={styles.textBar} style={{ width: "95%" }}></div>
-              <div className={styles.textBar} style={{ width: "88%" }}></div>
-              <div className={styles.textBar} style={{ width: "92%" }}></div>
-              <div className={styles.textBar} style={{ width: "75%" }}></div>
-              <div className={styles.textBar} style={{ width: "80%" }}></div>
-            </div>
+            <p>{article.content}</p>
           </div>
         </div>
 
         {/* 記事アクションボタン */}
         <div className={styles.actionButtons}>
           <Button>Edit</Button>
-          <Button variant="red">Delete</Button>
+          <Button variant="red" onClick={handleDelete}>
+            Delete
+          </Button>
         </div>
 
         {/*コメントセクション(記事下部のコメント欄)  */}
