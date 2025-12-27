@@ -3,6 +3,9 @@
   border-radius: 0.5rem;
   border: 1px solid rgba(0, 0, 0, 0.5);
   overflow: hidden;
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
 
 .imageContainer {

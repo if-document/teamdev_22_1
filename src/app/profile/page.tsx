@@ -1,23 +1,100 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "./(components)/button";
 import { Card } from "./(components)/card";
 import { Dropdown, DropdownMenu, DropdownItem } from "./(components)/dropdown-menu";
 import { Pagination } from "./(components)/pagination";
 import styles from "./page.module.css";
 
+type DbPost = {
+  id: number;
+  user_id: string;
+  category_id: number;
+  title: string;
+  content: string;
+  image_path: string;
+  created_at: string;
+  updated_at: string;
+  users?: {
+    name: string;
+  };
+};
+
+type Post = {
+  id: number;
+  title: string;
+  category: string;
+  author: string;
+  createdAt: string;
+  imageUrl?: string;
+};
+
+const FIXED_USER_ID = "fc6b7e74-3257-459a-8862-8d5800c6ad22";
+const PAGE_SIZE = 6;
+
+function formatRelativeTime(isoString: string) {
+  const created = new Date(isoString);
+  const now = new Date();
+  const diffMs = now.getTime() - created.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+
+  if (diffSec < 60) return "just now";
+
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) {
+    return diffMin === 1 ? "a min ago" : `${diffMin} mins ago`;
+  }
+
+  const diffHour = Math.floor(diffMin / 60);
+  if (diffHour < 24) {
+    return diffHour === 1 ? "an hour ago" : `${diffHour} hours ago`;
+  }
+
+  const diffDay = Math.floor(diffHour / 24);
+  return diffDay === 1 ? "a day ago" : `${diffDay} days ago`;
+}
+
 export default function ProfilePage() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data for blog posts
-  const posts = Array.from({ length: 6 }, (_, i) => ({
-    id: i + 1,
-    title: "Post Title",
-    category: "Category",
-    author: "Author",
-    timeAgo: "a min ago",
-  }));
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const res = await fetch("/api/article");
+        if (!res.ok) throw new Error("記事データの取得に失敗しました");
+        const data = await res.json();
+
+        // Filter posts by fixed user ID
+        const userPosts = data
+          .filter((p: DbPost) => p.user_id === FIXED_USER_ID)
+          .map((p: DbPost) => ({
+            id: p.id,
+            title: p.title || "Untitled",
+            category: String(p.category_id),
+            author: p.users?.name || "Unknown",
+            createdAt: p.created_at,
+            imageUrl: p.image_path,
+          }));
+
+        setPosts(userPosts);
+      } catch (error) {
+        console.error("記事データの取得に失敗しました：", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
+
+  const pagedPosts = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return posts.slice(start, start + PAGE_SIZE);
+  }, [posts, currentPage]);
 
   return (
     <div className={styles.container}>
@@ -52,19 +129,21 @@ export default function ProfilePage() {
 
         {/* Blog Cards Grid */}
         <div className={styles.grid}>
-          {posts.map((post) => (
+          {pagedPosts.map((post) => (
             <Card
               key={post.id}
+              id={post.id}
               title={post.title}
               category={post.category}
               author={post.author}
-              timeAgo={post.timeAgo}
+              timeAgo={formatRelativeTime(post.createdAt)}
+              image={post.imageUrl}
             />
           ))}
         </div>
 
         {/* Pagination */}
-        <Pagination currentPage={currentPage} totalPages={10} onPageChange={setCurrentPage} />
+        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
       </main>
     </div>
   );
